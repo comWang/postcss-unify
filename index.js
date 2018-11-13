@@ -2,7 +2,6 @@ var postcss = require('postcss');
 
 module.exports = postcss.plugin('postcss-unify', function (opts) {
     opts = opts || {};
-    console.log('ubify received options is ', opts);
     var size = opts.size || 750;
     return function (root) {
         root.walkRules(function (rule) {
