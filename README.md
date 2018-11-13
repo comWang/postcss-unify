@@ -7,6 +7,7 @@
 [ci]:      https://travis-ci.org/comwang/postcss-unify
 
 ```css
+<!-- before -->
 .foo {
     width:75;  /* default design size is 750px*/
     height:20px;
@@ -14,6 +15,7 @@
 ```
 
 ```css
+<!-- after -->
 .foo {
   width:10vw;
   height:20px;
@@ -21,9 +23,19 @@
 ```
 
 ## Usage
-
-```js
-postcss([ require('postcss-unify') ])
+``` bash
+$ cd myProject
+$ git clone git@github.com:comWang/postcss-unify.git
+$ npm install
+```
+For webpack:
+```javascript
+// postcss.config.js
+module.exports = {
+    plugins: [
+        require('./postcss-unify')({ size: 750 }),
+    ],
+};
 ```
 
-See [PostCSS] docs for examples for your environment.
+(`size: number`) Design draft width.
