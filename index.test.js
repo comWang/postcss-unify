@@ -1,5 +1,4 @@
 var postcss = require('postcss');
-
 var plugin = require('./index');
 
 function run(input, output, opts) {
@@ -83,6 +82,14 @@ it('10', function () {
     return run(
         '.a{ left: 0; right: 0; top: 50; min-width: 400; min-height: 600px }',
         '.a{ left: 0; right: 0; top: 50vw; min-width: 400vw; min-height: 600px }',
+        {deviceWidth: 100 }
+    );
+});
+
+it('11', function () {
+    return run(
+        '.a{ margin:   10    30    40    50; }',
+        '.a{ margin:   10vw 30vw 40vw 50vw; }',
         {deviceWidth: 100 }
     );
 });

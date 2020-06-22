@@ -3,15 +3,15 @@ var postcss = require('postcss');
 module.exports = postcss.plugin('postcss-unify', function (opts) {
     opts = opts || {};
     var size = opts.deviceWidth || 700;
+    var SPACE = ' ';
     return function (root) {
         root.walkRules(function (rule) {
             var filter = /(width)|(height)|(margin)|(padding)|(left)|(right)|(top)|(bottom)|(font-size)|(radius)/;
             rule.walkDecls(filter, function (decl) {
-                // 去除首尾空格
-                var value = decl.value.replace(/^\s+|\s+$/g, '');
-                var perList = value.split(' ');
+                // 去除首尾空格和多余空格
+                var value = decl.value.replace(/^\s+|\s+$/g, '').replace(/\s{2,}/g, SPACE);
+                var perList = value.split(SPACE);
                 var computed = '';
-                var SPACE = ' ';
                 if (perList.length === 0) {
                     decl.value = '';
                     return;
@@ -32,7 +32,8 @@ module.exports = postcss.plugin('postcss-unify', function (opts) {
                     }
                     return accumulator;
                 }, '')
-                decl.value = computed;
+                // postcss会保留源格式。如果不去除第一个空格，在源文件有空格的情况下会变成2个空格
+                decl.value = computed.slice(1, computed.length);
             });
         });
     };
