@@ -6,6 +6,14 @@
 [ci-img]:  https://travis-ci.org/comwang/postcss-unify.svg
 [ci]:      https://travis-ci.org/comwang/postcss-unify
 
+## Install
+### From github
+``` bash
+$ cd path-to-your-project
+$ git clone https://github.com/comWang/postcss-unify.git
+$ cd postcss-unify && npm link
+$ cd ../ && npm link postcss-unify
+```
 ## Usage
 ### For vue-cli
 ``` javascript
@@ -16,6 +24,7 @@ module.exports = {
         postcss: {
           ident: 'postcss',
           plugins: () => [
+            // change to your deviceWidth. 700, 1080, 1920 etc.
             require('postcss-unify')({deviceWidth: 700})
           ]
         }
@@ -39,7 +48,8 @@ module.exports = {
                         loader: 'postcss-loader',
                         options: {
                             plugins: () => [
-                                require('postcss-unify')({deviceWidth: 700})
+                              // change to your deviceWidth. 700, 1080, 1920 etc.
+                              require('postcss-unify')({deviceWidth: 700})
                             ]
                         }
                     }
@@ -49,9 +59,10 @@ module.exports = {
     }
 }
 ```
-这里的`deviceWidth`指的是屏幕跨度（以物理像素计算）。例如浏览器查看宽度为350px,设备的`devicePixelRatio`为2，那么这里`deviceWidth`等于700，这也是postcss-unify的默认值。通常情况下你应该将该值设为设计稿宽度的标注尺寸。
+这里的`deviceWidth`指的是屏幕宽度（以物理像素计算）。例如浏览器查看宽度为350px,设备的`devicePixelRatio`为2，那么这里`deviceWidth`等于700，这也是postcss-unify的默认值。通常情况下你应将该值设为设计稿宽度的标注尺寸。
+## Translate
+### before
 ```css
-/* before */
 .foo {
     width: 70;
     height: 20px;
@@ -59,9 +70,8 @@ module.exports = {
     font-size: 16;
 }
 ```
-
+### after
 ```css
-/* after */
 .foo {
   width: 10vw;
   height: 20px;
