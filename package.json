@@ -1,7 +1,7 @@
 {
   "name": "postcss-unify",
-  "version": "0.0.0",
-  "description": "PostCSS plugin keep same ratio on different screen size by vw",
+  "version": "1.0.0",
+  "description": "translate to vw",
   "keywords": [
     "postcss",
     "css",

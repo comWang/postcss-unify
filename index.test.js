@@ -12,39 +12,77 @@ function run(input, output, opts) {
 
 
 it('1', function () {
-    return run('.a{ width:75 }', '.a{ width:10vw }', {});
+    return run('.a{ width:75 }', '.a{ width:75vw }', {
+       deviceWidth: 100
+    });
 });
 
 it('2', function () {
-    return run('.a{ width:150;height:750 }',
-        '.a{ width:20vw;height:100vw }',
-        {});
+    return run('.a{ width: 20px; height: 30 }', '.a{ width: 20px; height: 30vw }', {
+       deviceWidth: 100
+    });
 });
 
 it('3', function () {
-    return run('.a{width:750;height:30px }',
-        '.a{width:100vw;height:30px }',
-        {});
+    return run(
+        '.a{ padding-left: 20; padding-right: 30px }',
+        '.a{ padding-left: 20vw; padding-right: 30px }',
+        {deviceWidth: 100 }
+    );
 });
 
 it('4', function () {
-    return run('.a{width:0 }', '.a{width:0 }', {});
+    return run(
+        '.a{ padding: 10 20 30px 0 }',
+        '.a{ padding: 10vw 20vw 30px 0 }',
+        {deviceWidth: 100 }
+    );
 });
 
 it('5', function () {
-    return run('.a{padding:75; }', '.a{padding:10vw; }', {});
+    return run(
+        '.a{ padding: 10 20 30px 0 }',
+        '.a{ padding: 10vw 20vw 30px 0 }',
+        {deviceWidth: 100 }
+    );
 });
 
 it('6', function () {
-    return run('.a{margin-left:150 }', '.a{margin-left:20vw }', {});
+    return run(
+        '.a{ margin: 20 30px 40 50px }',
+        '.a{ margin: 20vw 30px 40vw 50px }',
+        {deviceWidth: 100 }
+    );
 });
 
 it('7', function () {
-    return run('.a{top:75 }', '.a{top:10vw }', {});
+    return run(
+        '.a{ font-size: 16 }',
+        '.a{ font-size: 16vw }',
+        {deviceWidth: 100 }
+    );
 });
 
 it('8', function () {
-    return run('.a{top:75;padding-bottom:20% }',
-        '.a{top:10vw;padding-bottom:20% }',
-        {});
+    return run(
+        '.a{ font-size: 16px }',
+        '.a{ font-size: 16px }',
+        {deviceWidth: 100 }
+    );
+});
+
+it('9', function () {
+    return run(
+        '.a{ border-width: 6 }',
+        '.a{ border-width: 6vw }',
+        {deviceWidth: 100 }
+    );
+});
+
+it('10', function () {
+    return run(
+        '.a{ left: 0; right: 0; top: 50; min-width: 400; min-height: 600px }',
+        '.a{ left: 0; right: 0; top: 50vw; min-width: 400vw; min-height: 600px }',
+        {deviceWidth: 100 }
+    );
 });
