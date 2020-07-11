@@ -1,5 +1,11 @@
 {
-    "rules": {
-        "max-len": 0
-    }
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-useless-return":"error",
+    "no-unused-vars":"error",
+    "semi":"error"
+  }
 }

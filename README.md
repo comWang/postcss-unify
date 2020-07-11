@@ -24,6 +24,7 @@ module.exports = {
         postcss: {
           ident: 'postcss',
           plugins: () => [
+            require('autoprefixer')({}),
             // change to your deviceWidth. 700, 1080, 1920 etc.
             require('postcss-unify')({deviceWidth: 700})
           ]
@@ -48,6 +49,7 @@ module.exports = {
                         loader: 'postcss-loader',
                         options: {
                             plugins: () => [
+                              require('autoprefixer')({}),
                               // change to your deviceWidth. 700, 1080, 1920 etc.
                               require('postcss-unify')({deviceWidth: 700})
                             ]
@@ -80,12 +82,52 @@ module.exports = {
 }
 ```
 ## Notice
-【1.0.0】诸如`border-radius: 1 solid #ff00aa`这样混用尺寸与非尺寸属性的不会生效，你可以用下面的方式代替：
+诸如`border-radius: 1 solid #ff00aa`这样混用尺寸与非尺寸属性的不会生效，你可以用下面的方式代替：
 ``` css
 border-width: 1;
 border-style: solid;
 border-color: #ff00aa;
 ```
-开始使用吧！
+【1.0.1】现在可以指定需要转换的文件路径了。可以在传递选项中配置test, include, exclude字段指定/排除某些文件，当然这些选项不是必须的，但当它同你使用的框架（例如element-ui）产生冲突时很有必要！
+``` javascript
+// webpack.config.js
+// ignore others
+{
+  loader: 'postcss-loader',
+  options: (context) => {
+      plugins: () => [
+        require('autoprefixer')({}),
+        // change to your deviceWidth. 700, 1080, 1920 etc.
+        require('postcss-unify')({
+          // or context: context
+          context,
+          deviceWidth: 700,
+          // exclude specific path, usage like webpack rules
+          exclude: 'node_modules'
+        })
+      ]
+  }
+}
+
+// vue.config.js
+loaderOptions: {
+  postcss: (context) => {
+    ident: 'postcss',
+    plugins: () => [
+      require('autoprefixer')({}),
+      // change to your deviceWidth. 700, 1080, 1920 etc.
+      require('postcss-unify')({
+        // or context: context
+        context,
+        deviceWidth: 700,
+        // exclude specific path, usage like webpack rules
+        exclude: 'node_modules'
+      })
+    ]
+  }
+}
+```
+
+开始使用吧！🥰
 ## Resource
 [Writing Your First PostCSS Plugin](https://dockyard.com/blog/2018/02/01/writing-your-first-postcss-plugin)
