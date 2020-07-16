@@ -17,7 +17,7 @@
   "dependencies": {
     "better-assert": "^1.0.2",
     "mocha": "^8.0.1",
-    "postcss": "^6.0.16"
+    "postcss": "^7.0.32"
   },
   "devDependencies": {
     "eslint": "^4.18.2",

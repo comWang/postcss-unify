@@ -9,6 +9,11 @@ var isArray = function (a) {
 };
 
 module.exports = function (opts) {
+  if (opts.context && (!opts.context.file || !opts.context.file.dirname) && (opts.test || opts.include || opts.exclude)) {
+    console.log('Cannot found [Context.file] but you want to filter something;' +
+    'Perhaps three-part plugin is not providing file path and this maybe cause compiling conflicts.');
+  }
+  if (!opts.context || !opts.context.file || !opts.context.file.dirname) return false;
   var dirname = opts.context.file.dirname,
     test = opts.test,
     include = opts.include,

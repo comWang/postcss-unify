@@ -12,9 +12,7 @@ const filter = require('../filter');
 const run = (path, options, isNotFiltered) => {
   const isFiltered = filter({
     context: {
-      file: {
-        dirname: path,
-      },
+      file: (() => (path ? { dirname: path } : undefined))(),
     },
     test: options.test,
     include: options.include,
@@ -23,32 +21,31 @@ const run = (path, options, isNotFiltered) => {
   assert(isFiltered !== isNotFiltered);
 };
 
+
 describe('Filter specific files', () => {
+  // deal with empty
   it('1', () =>
     run(
-      path.resolve(__dirname, 'node_modules', 'src', 'some'),
+      undefined,
       {
         test: /.*(\/|\\)src(\/|\\).*/,
       },
       true
     ));
-
-  it('2', () =>
-    run(
-      path.resolve(__dirname, 'node_modules', 'src', 'some'),
-      {
-        test: /.*(\/|\\)src(\/|\\).*/,
-        exclude: 'node_modules',
+  it('2', () => {
+    const isFiltered = filter({
+      context: {
+        file: {}
       },
-      false
-    ));
-
+      test: /.*(\/|\\)src(\/|\\).*/,
+    });
+    assert(isFiltered === false);
+  });
   it('3', () =>
     run(
       path.resolve(__dirname, 'node_modules', 'src', 'some'),
       {
         test: /.*(\/|\\)src(\/|\\).*/,
-        include: ['src', 'some'],
       },
       true
     ));
@@ -58,13 +55,33 @@ describe('Filter specific files', () => {
       path.resolve(__dirname, 'node_modules', 'src', 'some'),
       {
         test: /.*(\/|\\)src(\/|\\).*/,
+        exclude: 'node_modules',
+      },
+      false
+    ));
+
+  it('5', () =>
+    run(
+      path.resolve(__dirname, 'node_modules', 'src', 'some'),
+      {
+        test: /.*(\/|\\)src(\/|\\).*/,
+        include: ['src', 'some'],
+      },
+      true
+    ));
+
+  it('6', () =>
+    run(
+      path.resolve(__dirname, 'node_modules', 'src', 'some'),
+      {
+        test: /.*(\/|\\)src(\/|\\).*/,
         include: ['src', 'some'],
         exclude: 'node_modules',
       },
       false
     ));
 
-    it('5', () =>
+    it('7', () =>
     run(
       path.resolve(__dirname, 'node_modules', 'framework', 'some'),
       {
@@ -73,7 +90,7 @@ describe('Filter specific files', () => {
       false
     ));
 
-    it('6', () =>
+    it('8', () =>
     run(
       path.resolve(__dirname, 'src', 'folder', 'componentA'),
       {
@@ -81,7 +98,7 @@ describe('Filter specific files', () => {
       },
       true
     ));
-    it('7', () =>
+    it('9', () =>
     run(
       path.resolve(__dirname, 'src', 'folder', 'componentA'),
       {
