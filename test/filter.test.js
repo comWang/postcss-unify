@@ -4,13 +4,13 @@ const filter = require('./../lib/filter');
 
 /**
  *
- * @param {String} path 文件的绝对路径
- * @param {Object} options 对路径的匹配模式
- * @param {Boolean} isNotFiltered  test，include匹配成功且exclude匹配失败的路径，不会被过滤
+ * @param {String} pathStr 文件的绝对路径
+ * @param {Object} options 向插件传递的参数
+ * @param {Boolean} isPassed  该文件能否通过过滤（即文本内容是否可以被插件处理）
  * test, include, exclude优先级递增
  */
-const run = (pathStr, options, isNotFiltered) => {
-    const isFiltered = filter({
+const run = (pathStr, options, isPassed) => {
+    const canTargetAccess = filter({
         context: {
             file: (() => pathStr ? { dirname: pathStr } : undefined)()
         },
@@ -18,10 +18,10 @@ const run = (pathStr, options, isNotFiltered) => {
         include: options.include,
         exclude: options.exclude
     });
-    assert.strictEqual(isFiltered, !isNotFiltered);
+    assert.strictEqual(canTargetAccess, isPassed);
 };
 
-describe('Filter specific files', () => {
+describe('Filter', () => {
     // deal with empty
     it('1', () =>
         run(
@@ -32,13 +32,13 @@ describe('Filter specific files', () => {
             true
         ));
     it('2', () => {
-        const isFiltered = filter({
+        const canTargetAccess = filter({
             context: {
                 file: {}
             },
             test: /.*(\/|\\)src(\/|\\).*/
         });
-        assert(isFiltered === false);
+        assert(canTargetAccess === true);
     });
     it('3', () =>
         run(

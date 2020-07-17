@@ -24,8 +24,8 @@
         "eslint-config-postcss": "^2.0.2"
     },
     "scripts": {
-        "lint": "eslint '/lib/**/*.js'",
-        "test": "mocha --recursive './test/**/*.test.js'"
+        "lint": "eslint index.js lib/",
+        "test": "npm run lint && mocha --recursive './test/**/*.test.js'"
     },
     "prettier": {
         "singleQuote": true,

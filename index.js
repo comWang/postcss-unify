@@ -4,7 +4,7 @@ let handleRule = require('./lib/translator');
 
 module.exports = postcss.plugin('postcss-unify', (opts) => {
     opts = opts || {};
-    let size = opts.deviceWidth || 700;
+    const size = opts.deviceWidth || 700;
     return function (root) {
         if (!opts.context && (opts.test || opts.exclude || opts.include)) {
             console.log(

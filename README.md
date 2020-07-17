@@ -1,41 +1,48 @@
-# PostCSS Unify [![Build Status][ci-img]][ci]
+# [PostCSS] Unify [![Build Status][ci-img]][ci]
 
-[PostCSS] 换算为等长的以vw为单位的尺寸
+[PostCSS] 换算为等长的以 vw 为单位的尺寸
 
-[PostCSS]: https://github.com/postcss/postcss
-[ci-img]:  https://travis-ci.org/comwang/postcss-unify.svg
-[ci]:      https://travis-ci.org/comwang/postcss-unify
+[postcss]: https://github.com/postcss/postcss
+[ci-img]: https://travis-ci.org/comwang/postcss-unify.svg
+[ci]: https://travis-ci.org/comwang/postcss-unify
 
 ## Install
+
 ### From github
-``` bash
+
+```bash
 $ cd path-to-your-project
 $ git clone https://github.com/comWang/postcss-unify.git
 $ cd postcss-unify && npm link
 $ cd ../ && npm link postcss-unify
 ```
+如果是在powershell下使用，请将 `&&` 替换为 `;`。
+
 ## Usage
+
 ### For vue-cli
-``` javascript
+
+```javascript
 // vue.config.js
 module.exports = {
     css: {
-      loaderOptions: {
-        postcss: {
-          ident: 'postcss',
-          plugins: () => [
-            require('autoprefixer')({}),
-            // change to your deviceWidth. 700, 1080, 1920 etc.
-            require('postcss-unify')({deviceWidth: 700})
-          ]
+        loaderOptions: {
+            postcss: {
+                ident: 'postcss',
+                plugins: () => [
+                    require('autoprefixer')({}),
+                    // change to your deviceWidth. 700, 1080, 1920 etc.
+                    require('postcss-unify')({ deviceWidth: 700 })
+                ]
+            }
         }
-      }
     }
-}
+};
 ```
 
 ### For webpack
-``` javascript
+
+```javascript
 // webpack.config.js
 module.exports = {
     module: {
@@ -61,9 +68,13 @@ module.exports = {
     }
 }
 ```
-这里的`deviceWidth`指的是屏幕宽度（以物理像素计算）。例如浏览器查看宽度为350px,设备的`devicePixelRatio`为2，那么这里`deviceWidth`等于700，这也是postcss-unify的默认值。通常情况下你应将该值设为设计稿宽度的标注尺寸。
+
+通常情况下你应将`deviceWidth`改为你所参照的设计稿宽度。一般而言，设计师会以设备的物理像素为基准作图。例如屏幕像素为 350px，设备的[devicePixelRatio](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/devicePixelRatio)为 2，设计稿通常会是 700px，这也是 postcss-unify 的默认值。
+
 ## Translate
+
 ### before
+
 ```css
 .foo {
     width: 70;
@@ -72,62 +83,34 @@ module.exports = {
     font-size: 16;
 }
 ```
+
 ### after
+
 ```css
 .foo {
-  width: 10vw;
-  height: 20px;
-  padding: 1.42857vw 2.85714vw 30px 0;
-  font-size: 2.28571vw;
+    width: 10vw;
+    height: 20px;
+    padding: 1.42857vw 2.85714vw 30px 0;
+    font-size: 2.28571vw;
 }
 ```
-## Notice
-诸如`border-radius: 1 solid #ff00aa`这样混用尺寸与非尺寸属性的不会生效，你可以用下面的方式代替：
-``` css
-border-width: 1;
-border-style: solid;
-border-color: #ff00aa;
-```
-【1.0.1】现在可以指定需要转换的文件路径了。可以在传递选项中配置test, include, exclude字段指定/排除某些文件，当然这些选项不是必须的，但当它同你使用的框架（例如element-ui）产生冲突时很有必要！
-``` javascript
-// webpack.config.js
-// ignore others
-{
-  loader: 'postcss-loader',
-  options: (context) => {
-      plugins: () => [
-        require('autoprefixer')({}),
-        // change to your deviceWidth. 700, 1080, 1920 etc.
-        require('postcss-unify')({
-          // or context: context
-          context,
-          deviceWidth: 700,
-          // exclude specific path, usage like webpack rules
-          exclude: 'node_modules'
-        })
-      ]
-  }
-}
 
-// vue.config.js
-loaderOptions: {
-  postcss: (context) => {
-    ident: 'postcss',
-    plugins: () => [
-      require('autoprefixer')({}),
-      // change to your deviceWidth. 700, 1080, 1920 etc.
-      require('postcss-unify')({
-        // or context: context
+还可以在选项中配置 test, include, exclude 字段指定/排除某些文件，不过这时需要传递额外的[context](https://www.npmjs.com/package/postcss-loader)参数。
+
+```javascript
+// ignore others...
+plugins: (context) => [
+    require('postcss-unify')({
         context,
         deviceWidth: 700,
-        // exclude specific path, usage like webpack rules
+        // like webpack rules
         exclude: 'node_modules'
-      })
-    ]
-  }
-}
+    })
+];
 ```
 
 开始使用吧！🥰
+
 ## Resource
+
 [Writing Your First PostCSS Plugin](https://dockyard.com/blog/2018/02/01/writing-your-first-postcss-plugin)
