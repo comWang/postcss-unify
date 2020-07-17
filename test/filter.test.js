@@ -1,6 +1,6 @@
 const path = require('path');
-const assert = require('better-assert');
-const filter = require('../filter');
+const assert = require('power-assert');
+const filter = require('./../lib/filter');
 
 /**
  *
@@ -9,101 +9,100 @@ const filter = require('../filter');
  * @param {Boolean} isNotFiltered  test，include匹配成功且exclude匹配失败的路径，不会被过滤
  * test, include, exclude优先级递增
  */
-const run = (path, options, isNotFiltered) => {
-  const isFiltered = filter({
-    context: {
-      file: (() => (path ? { dirname: path } : undefined))(),
-    },
-    test: options.test,
-    include: options.include,
-    exclude: options.exclude,
-  });
-  assert(isFiltered !== isNotFiltered);
+const run = (pathStr, options, isNotFiltered) => {
+    const isFiltered = filter({
+        context: {
+            file: (() => pathStr ? { dirname: pathStr } : undefined)()
+        },
+        test: options.test,
+        include: options.include,
+        exclude: options.exclude
+    });
+    assert.strictEqual(isFiltered, !isNotFiltered);
 };
 
-
 describe('Filter specific files', () => {
-  // deal with empty
-  it('1', () =>
-    run(
-      undefined,
-      {
-        test: /.*(\/|\\)src(\/|\\).*/,
-      },
-      true
-    ));
-  it('2', () => {
-    const isFiltered = filter({
-      context: {
-        file: {}
-      },
-      test: /.*(\/|\\)src(\/|\\).*/,
+    // deal with empty
+    it('1', () =>
+        run(
+            undefined,
+            {
+                test: /.*(\/|\\)src(\/|\\).*/
+            },
+            true
+        ));
+    it('2', () => {
+        const isFiltered = filter({
+            context: {
+                file: {}
+            },
+            test: /.*(\/|\\)src(\/|\\).*/
+        });
+        assert(isFiltered === false);
     });
-    assert(isFiltered === false);
-  });
-  it('3', () =>
-    run(
-      path.resolve(__dirname, 'node_modules', 'src', 'some'),
-      {
-        test: /.*(\/|\\)src(\/|\\).*/,
-      },
-      true
-    ));
+    it('3', () =>
+        run(
+            path.resolve(__dirname, 'node_modules', 'src', 'some'),
+            {
+                test: /.*(\/|\\)src(\/|\\).*/
+            },
+            true
+        ));
 
-  it('4', () =>
-    run(
-      path.resolve(__dirname, 'node_modules', 'src', 'some'),
-      {
-        test: /.*(\/|\\)src(\/|\\).*/,
-        exclude: 'node_modules',
-      },
-      false
-    ));
+    it('4', () =>
+        run(
+            path.resolve(__dirname, 'node_modules', 'src', 'some'),
+            {
+                test: /.*(\/|\\)src(\/|\\).*/,
+                exclude: 'node_modules'
+            },
+            false
+        ));
 
-  it('5', () =>
-    run(
-      path.resolve(__dirname, 'node_modules', 'src', 'some'),
-      {
-        test: /.*(\/|\\)src(\/|\\).*/,
-        include: ['src', 'some'],
-      },
-      true
-    ));
+    it('5', () =>
+        run(
+            path.resolve(__dirname, 'node_modules', 'src', 'some'),
+            {
+                test: /.*(\/|\\)src(\/|\\).*/,
+                include: ['src', 'some']
+            },
+            true
+        ));
 
-  it('6', () =>
-    run(
-      path.resolve(__dirname, 'node_modules', 'src', 'some'),
-      {
-        test: /.*(\/|\\)src(\/|\\).*/,
-        include: ['src', 'some'],
-        exclude: 'node_modules',
-      },
-      false
-    ));
+    it('6', () =>
+        run(
+            path.resolve(__dirname, 'node_modules', 'src', 'some'),
+            {
+                test: /.*(\/|\\)src(\/|\\).*/,
+                include: ['src', 'some'],
+                exclude: 'node_modules'
+            },
+            false
+        ));
 
     it('7', () =>
-    run(
-      path.resolve(__dirname, 'node_modules', 'framework', 'some'),
-      {
-        exclude: 'node_modules',
-      },
-      false
-    ));
+        run(
+            path.resolve(__dirname, 'node_modules', 'framework', 'some'),
+            {
+                exclude: 'node_modules'
+            },
+            false
+        ));
 
     it('8', () =>
-    run(
-      path.resolve(__dirname, 'src', 'folder', 'componentA'),
-      {
-        include: ['src', 'componentA'],
-      },
-      true
-    ));
+        run(
+            path.resolve(__dirname, 'src', 'folder', 'componentA'),
+            {
+                include: ['src', 'componentA']
+            },
+            true
+        ));
     it('9', () =>
-    run(
-      path.resolve(__dirname, 'src', 'folder', 'componentA'),
-      {
-        include: 'componentB',
-      },
-      false
-    ));
+        run(
+            path.resolve(__dirname, 'src', 'folder', 'componentA'),
+            {
+                include: 'componentB'
+            },
+            false
+        ));
 });
