@@ -16,7 +16,7 @@
     "homepage": "https://github.com/comwang/postcss-unify",
     "dependencies": {
         "mocha": "^8.0.1",
-        "postcss": "^7.0.32",
+        "postcss": "^8.2.10",
         "power-assert": "^1.6.1"
     },
     "devDependencies": {
